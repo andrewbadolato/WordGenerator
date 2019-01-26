@@ -1,4 +1,5 @@
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -6,12 +7,14 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 
-public class Values {
-
+public class Values implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	//private String numResults;
 	private int numResults;
 	private int counter;
 	private String eachResult;
+	private String filename;
 	private ArrayList<String> lstPattern = new ArrayList<>();
 	private ArrayList<String> lstOne = new ArrayList<>();
 	private ArrayList<String> lstTwo = new ArrayList<>();
@@ -25,11 +28,20 @@ public class Values {
 		numResults = numberOfResults;
 	}
 
-	//set NumResults
+	//set filename
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	//get filename
+	public String getFilename() {
+		return filename;
+	}
+	
+	//set numResults
 	public void setNumResults(int results) {
 		this.numResults = results;
 	}
-	//get NumResults
+	//get numResults
 	public int getNumResults() {
 		return numResults;
 	}

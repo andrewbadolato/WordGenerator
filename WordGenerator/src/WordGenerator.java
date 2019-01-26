@@ -1,11 +1,15 @@
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
 
 
 public class WordGenerator extends javax.swing.JFrame {
-
+	private static final long serialVersionUID = 1L;
+	
 	//GUI elements
 	private JButton btnGenerate;
 	private JMenu jMenu1;
@@ -317,6 +321,22 @@ public class WordGenerator extends javax.swing.JFrame {
 		genResults();
 		System.out.println("Generated");		
 	}
+	
+		
+		public void WriteObjectToFile(Object serObj) {
+	        try {
+	            FileOutputStream fileOut = new FileOutputStream(val.getFilename());
+	            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+	            objectOut.writeObject(serObj);
+	            objectOut.close();
+	            System.out.println("The Object  was succesfully written to a file");
+
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+
+	    }
+	
 
 	private void genResults() {
 		txtResults.setText("");
