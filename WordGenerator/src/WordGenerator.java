@@ -110,8 +110,6 @@ public class WordGenerator extends javax.swing.JFrame {
 		mnSave = new JMenuItem();
 		mnExit = new JMenuItem();
 
-		//		mnSave.setText("jMenuItem1");
-
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		txtOne.setColumns(15);
@@ -311,10 +309,8 @@ public class WordGenerator extends javax.swing.JFrame {
 				try {
 					mnOpenActionPerformed(evt);
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -372,41 +368,28 @@ public class WordGenerator extends javax.swing.JFrame {
 
 	//File menu item actions
 	private void mnNewActionPerformed(ActionEvent evt) {
-
-		//add prompt to save when any text areas (not number of results) contain values
-
+		//Note: add prompt to save when any text areas (not number of results) contain values
 		resetValues();
-
 	}
 
 	private void mnOpenActionPerformed(ActionEvent evt) throws ClassNotFoundException, IOException {
-		//FIle chooser
-
 		ReadFile(val);
 	}
 
 	private void mnSaveActionPerformed(ActionEvent evt)  {
-
-		//File chooser
-
 		try {
 			WriteObjectToFile(val);
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
-		System.out.println("Save Clicked");
-
 
 	}
 
 	private void btnGenerateMouseClicked(java.awt.event.MouseEvent evt) {
 		fillArrays();
-		System.out.println("Filled");
 		genResults();
-		System.out.println("Generated");		
 	}
-
 
 	//Save all values to file
 	public void WriteObjectToFile(Object serObj) throws IOException {
@@ -418,13 +401,10 @@ public class WordGenerator extends javax.swing.JFrame {
 	    int returnVal = chooser.showSaveDialog(null);
 	    if(returnVal == JFileChooser.APPROVE_OPTION) {
 	    	filename = chooser.getSelectedFile().getCanonicalPath();
-	    	System.out.println("Filename:" + filename);
 	    	String fileExt = FilenameUtils.getExtension(filename);
 	    	if (fileExt.isBlank()) {
 	    		filename = filename + wgExtension;
 	    	}
-	       System.out.println("You chose to save to this file: " +
-	            filename);
 	    }
 
 		FileOutputStream fileOutputStream
@@ -446,8 +426,6 @@ public class WordGenerator extends javax.swing.JFrame {
 	    int returnVal = chooser.showOpenDialog(null);
 	    if(returnVal == JFileChooser.APPROVE_OPTION) {
 	    	filename = chooser.getSelectedFile().getCanonicalPath();
-	       System.out.println("You chose to open this file: " +
-	            filename);
 	    }
 
 		FileInputStream fileInputStream = new FileInputStream(filename);
@@ -455,8 +433,6 @@ public class WordGenerator extends javax.swing.JFrame {
 		Values val = (Values) objectInputStream.readObject();
 		objectInputStream.close(); 
 
-		System.out.println("Results " + val.getLstResults());
-		//fillValues();
 		String txtOneString = val.getListOne().toString();
 		txtOneString = txtOneString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
 		String txtTwoString = val.getListTwo().toString();
@@ -489,13 +465,10 @@ public class WordGenerator extends javax.swing.JFrame {
 	//Generate letter combinations in results panel
 	private void genResults() {
 		txtResults.setText("");
-		System.out.println("Set text");
 		val.generateWords(val.getNumResults(), val.getListOne(), val.getListTwo(), val.getListThree(), val.getListFour(), val.getListFive(), val.getListSix(), val.getPatternList());
-		System.out.println("Generated results");
 		String results = val.getLstResults().toString();
 		results = results.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
 		txtResults.append(results);
-		System.out.println("Appended list results");
 	}
 
 	//Fill arrays with values entered into generator
@@ -564,7 +537,6 @@ public class WordGenerator extends javax.swing.JFrame {
 		}
 		sPattern.close();
 		val.setPatternList(lstPatterns);
-		System.out.println("Appended Pattern list");
 
 	}
 
@@ -593,8 +565,6 @@ public class WordGenerator extends javax.swing.JFrame {
 		val.setPatternList(null);
 		val.setLstResults(null);
 		val.setNumResults(defaultResults);
-		System.out.println("New Value Set");
-		System.out.println(val.getLstResults());
 	}
 
 	public static void main(String args[]) {

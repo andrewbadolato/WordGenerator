@@ -140,7 +140,6 @@ public class Values implements Serializable {
 	public ArrayList<String> generateWords(int numResults, ArrayList<String> lstOne, 
 			ArrayList<String> lstTwo, ArrayList<String> lstThree, ArrayList<String> lstFour, 
 			ArrayList<String> lstFive, ArrayList<String> lstSix, ArrayList<String> lstPatterns) {
-		System.out.println("initate generateWords");
 		String indResult = "";
 		String selectedLetter = "";
 		String selectedPattern = "";
@@ -152,10 +151,7 @@ public class Values implements Serializable {
 		int selectedLetterNum;
 		String error = "Enter at least one generation pattern.";
 
-		System.out.println("Set Counter To " + counter);
-
 		//Check lstPatterns for values
-		//If lstPatterns is empty, display error message and return lstResults
 		if (lstPatterns.isEmpty()) {
 
 			JOptionPane.showMessageDialog(null, error, "WordGenerator",
@@ -168,14 +164,11 @@ public class Values implements Serializable {
 			do {
 				int selectedPatternNum = RandomUtils.nextInt(0, (lstPatterns.size() -1));
 				selectedPattern = lstPatterns.get(selectedPatternNum);
-				System.out.println("Selected Pattern " + selectedPattern);
 
 				lstElements = StringUtils.split(selectedPattern);
 				patternCounter = selectedPattern.length();
-				System.out.println("Pattern Counter set to " + patternCounter);
 				do {				
 					patternElement = ArrayUtils.toString(lstElements).charAt(patternCounter);
-					System.out.println("Pattern Element " + patternElement);
 					{
 						switch(patternElement)
 						{
@@ -231,13 +224,10 @@ public class Values implements Serializable {
 								selectedLetter = lstSix.get(selectedLetterNum);
 							}
 						}	
-						System.out.println("Selected letter " + selectedLetter);
-
+						
 						indResult += selectedLetter;
 						selectedLetter = "";
-						System.out.println("IndResult = " + indResult);
 						patternCounter -= 1;
-						System.out.println("Pattern Counter set to " + patternCounter);
 					}
 
 				} while (patternCounter > 0);
@@ -245,7 +235,6 @@ public class Values implements Serializable {
 				lstResults.add(indResult);
 				indResult = "";
 				counter = counter - 1;
-				System.out.println("Counter set to " + counter);
 
 			} while (counter > 0);
 		}
