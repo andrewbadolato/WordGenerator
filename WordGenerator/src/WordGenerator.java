@@ -1,21 +1,30 @@
 
-import java.io.File;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.commons.io.FilenameUtils;
 
 
 public class WordGenerator extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
-	
-	//GUI elements
+
 	private JButton btnGenerate;
-	private JMenu jMenu1;
-	private JMenuBar jMenuBar1;
-	private JMenuItem jMenuItem1;
-	private JMenuItem jMenuItem2;
+	private JMenu mnFile;
+	private JMenuBar menuBar;
+	private JMenuItem mnNew;
+	private JMenuItem mnSave;
+	private JMenuItem mnOpen;
+	private JMenuItem mnExit;
 	private JPanel jPanel1;
 	private JPanel jPanel2;
 	private JScrollPane jScrollPane1;
@@ -45,55 +54,67 @@ public class WordGenerator extends javax.swing.JFrame {
 	private JTextArea txtThree;
 	private JTextArea txtTwo;
 
-	//New Values object
-	private int defNumResults = 1;
-	Values val = new Values(defNumResults);
-
+	private int defaultResults = 1;
+	private String title = "WordGenerator";
+	private String filename = "file.val";
+	private String wgExtension = ".val";
+	Values val = new Values(defaultResults);
+	
 	public WordGenerator() {
 		initComponents();
 	}
 
 	private void initComponents() {
 
-		jMenuItem1 = new javax.swing.JMenuItem();
-		jPanel1 = new javax.swing.JPanel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		txtOne = new javax.swing.JTextArea();
-		lblOne = new javax.swing.JLabel();
-		lblThree = new javax.swing.JLabel();
-		jScrollPane2 = new javax.swing.JScrollPane();
-		txtThree = new javax.swing.JTextArea();
-		jScrollPane3 = new javax.swing.JScrollPane();
-		txtFive = new javax.swing.JTextArea();
-		lblFive = new javax.swing.JLabel();
-		lblTwo = new javax.swing.JLabel();
-		jScrollPane4 = new javax.swing.JScrollPane();
-		txtTwo = new javax.swing.JTextArea();
-		jScrollPane5 = new javax.swing.JScrollPane();
-		txtPatterns = new javax.swing.JTextArea();
-		lblPatterns = new javax.swing.JLabel();
-		jScrollPane6 = new javax.swing.JScrollPane();
-		txtSix = new javax.swing.JTextArea();
-		lblSix = new javax.swing.JLabel();
-		jScrollPane8 = new javax.swing.JScrollPane();
-		txtFour = new javax.swing.JTextArea();
-		lblFour = new javax.swing.JLabel();
-		jPanel2 = new javax.swing.JPanel();
-		lblNumResults = new javax.swing.JLabel();
-		txtNumResults = new javax.swing.JTextField();
-		jScrollPane7 = new javax.swing.JScrollPane();
-		txtResults = new javax.swing.JTextArea();
-		btnGenerate = new javax.swing.JButton();
-		lblResults = new javax.swing.JLabel();
-		jMenuBar1 = new javax.swing.JMenuBar();
-		jMenu1 = new javax.swing.JMenu();
-		jMenuItem2 = new javax.swing.JMenuItem();
+		this.setTitle(title);
 
-		jMenuItem1.setText("jMenuItem1");
+	    try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    }catch(Exception ex) {
+	        ex.printStackTrace();
+	    }
+	    
+		jPanel1 = new JPanel();
+		jScrollPane1 = new JScrollPane();
+		txtOne = new JTextArea();
+		lblOne = new JLabel();
+		lblThree = new JLabel();
+		jScrollPane2 = new JScrollPane();
+		txtThree = new JTextArea();
+		jScrollPane3 = new JScrollPane();
+		txtFive = new JTextArea();
+		lblFive = new JLabel();
+		lblTwo = new JLabel();
+		jScrollPane4 = new JScrollPane();
+		txtTwo = new JTextArea();
+		jScrollPane5 = new JScrollPane();
+		txtPatterns = new JTextArea();
+		lblPatterns = new JLabel();
+		jScrollPane6 = new JScrollPane();
+		txtSix = new JTextArea();
+		lblSix = new JLabel();
+		jScrollPane8 = new JScrollPane();
+		txtFour = new JTextArea();
+		lblFour = new JLabel();
+		jPanel2 = new JPanel();
+		lblNumResults = new JLabel();
+		txtNumResults = new JTextField();
+		jScrollPane7 = new JScrollPane();
+		txtResults = new JTextArea();
+		btnGenerate = new JButton();
+		lblResults = new JLabel();
+		menuBar = new JMenuBar();
+		mnFile = new JMenu();
+		mnNew = new JMenuItem();
+		mnOpen = new JMenuItem();
+		mnSave = new JMenuItem();
+		mnExit = new JMenuItem();
+
+		//		mnSave.setText("jMenuItem1");
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		txtOne.setColumns(20);
+		txtOne.setColumns(15);
 		txtOne.setRows(5);
 		jScrollPane1.setViewportView(txtOne);
 
@@ -101,11 +122,11 @@ public class WordGenerator extends javax.swing.JFrame {
 
 		lblThree.setText("Mid-word Consonants (3):");
 
-		txtThree.setColumns(20);
+		txtThree.setColumns(15);
 		txtThree.setRows(5);
 		jScrollPane2.setViewportView(txtThree);
 
-		txtFive.setColumns(20);
+		txtFive.setColumns(15);
 		txtFive.setRows(5);
 		jScrollPane3.setViewportView(txtFive);
 
@@ -113,23 +134,23 @@ public class WordGenerator extends javax.swing.JFrame {
 
 		lblTwo.setText("Beginning Vowels (2):");
 
-		txtTwo.setColumns(20);
+		txtTwo.setColumns(15);
 		txtTwo.setRows(5);
 		jScrollPane4.setViewportView(txtTwo);
 
-		txtPatterns.setColumns(20);
+		txtPatterns.setColumns(10);
 		txtPatterns.setRows(5);
 		jScrollPane5.setViewportView(txtPatterns);
 
 		lblPatterns.setText("Possible Patterns:");
 
-		txtSix.setColumns(20);
+		txtSix.setColumns(15);
 		txtSix.setRows(5);
 		jScrollPane6.setViewportView(txtSix);
 
 		lblSix.setText("Ending Vowels (6):");
 
-		txtFour.setColumns(20);
+		txtFour.setColumns(15);
 		txtFour.setRows(5);
 		jScrollPane8.setViewportView(txtFour);
 
@@ -216,7 +237,7 @@ public class WordGenerator extends javax.swing.JFrame {
 		lblNumResults.setText("# of Results");
 		lblNumResults.setToolTipText("");
 
-		txtResults.setColumns(10);
+		txtResults.setColumns(5);
 		txtResults.setLineWrap(true);
 		txtResults.setRows(5);
 		jScrollPane7.setViewportView(txtResults);
@@ -250,7 +271,7 @@ public class WordGenerator extends javax.swing.JFrame {
 										jPanel2Layout.createSequentialGroup()
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 532,
+										.addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 387,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addContainerGap()))));
 		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,22 +291,60 @@ public class WordGenerator extends javax.swing.JFrame {
 								.addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
 								.addGap(5, 5, 5)))));
 
-		txtNumResults.setText(Integer.toString(defNumResults));
+		txtNumResults.setText(Integer.toString(defaultResults));
 
-		jMenu1.setText("File");
+		mnFile.setText("File");
 
-		jMenuItem2.setText("Exit");
-		jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+
+		mnNew.setText("New"); mnNew.setPreferredSize(new Dimension(100, mnFile.getPreferredSize().height));
+		mnNew.addActionListener(new
+				java.awt.event.ActionListener() {
+
+			@Override public void actionPerformed(java.awt.event.ActionEvent evt) {
+				mnNewActionPerformed(evt); } });
+
+
+		mnOpen.setText("Open...");
+		mnOpen.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem2ActionPerformed(evt);
+				try {
+					mnOpenActionPerformed(evt);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
-		jMenu1.add(jMenuItem2);
 
-		jMenuBar1.add(jMenu1);
+		mnSave.setText("Save...");
+		mnSave.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				mnSaveActionPerformed(evt);
+			}
+		});
 
-		setJMenuBar(jMenuBar1);
+
+		mnExit.setText("Exit");
+		mnExit.addActionListener(new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				System.exit(0);
+			}
+		});
+
+		mnFile.add(mnNew);
+		mnFile.add(mnOpen);	
+		mnFile.add(mnSave);
+		mnFile.add(mnExit);
+
+		menuBar.add(mnFile);
+
+		setJMenuBar(menuBar);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -309,10 +368,36 @@ public class WordGenerator extends javax.swing.JFrame {
 						.addContainerGap()));
 
 		pack();
-	}// </editor-fold>
+	}
 
-	private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {
-		System.exit(0);
+	//File menu item actions
+	private void mnNewActionPerformed(ActionEvent evt) {
+
+		//add prompt to save when any text areas (not number of results) contain values
+
+		resetValues();
+
+	}
+
+	private void mnOpenActionPerformed(ActionEvent evt) throws ClassNotFoundException, IOException {
+		//FIle chooser
+
+		ReadFile(val);
+	}
+
+	private void mnSaveActionPerformed(ActionEvent evt)  {
+
+		//File chooser
+
+		try {
+			WriteObjectToFile(val);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		System.out.println("Save Clicked");
+
+
 	}
 
 	private void btnGenerateMouseClicked(java.awt.event.MouseEvent evt) {
@@ -321,23 +406,87 @@ public class WordGenerator extends javax.swing.JFrame {
 		genResults();
 		System.out.println("Generated");		
 	}
-	
-		
-		public void WriteObjectToFile(Object serObj) {
-	        try {
-	            FileOutputStream fileOut = new FileOutputStream(val.getFilename());
-	            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-	            objectOut.writeObject(serObj);
-	            objectOut.close();
-	            System.out.println("The Object  was succesfully written to a file");
 
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
 
+	//Save all values to file
+	public void WriteObjectToFile(Object serObj) throws IOException {
+
+	    JFileChooser chooser = new JFileChooser();
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	        "WordGenerator Files (.val)", "val", "txt");
+	    chooser.setFileFilter(filter);
+	    int returnVal = chooser.showSaveDialog(null);
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+	    	filename = chooser.getSelectedFile().getCanonicalPath();
+	    	System.out.println("Filename:" + filename);
+	    	String fileExt = FilenameUtils.getExtension(filename);
+	    	if (fileExt.isBlank()) {
+	    		filename = filename + wgExtension;
+	    	}
+	       System.out.println("You chose to save to this file: " +
+	            filename);
 	    }
-	
 
+		FileOutputStream fileOutputStream
+		= new FileOutputStream(filename);
+		ObjectOutputStream objectOutputStream 
+		= new ObjectOutputStream(fileOutputStream);
+		objectOutputStream.writeObject(val);
+		objectOutputStream.flush();
+		objectOutputStream.close();
+	}
+
+	//Open and read selected file
+	public void ReadFile(Object serObj) throws IOException, ClassNotFoundException {
+
+	    JFileChooser chooser = new JFileChooser();
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	        "WordGenerator Files (.val)", "val", "txt");
+	    chooser.setFileFilter(filter);
+	    int returnVal = chooser.showOpenDialog(null);
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+	    	filename = chooser.getSelectedFile().getCanonicalPath();
+	       System.out.println("You chose to open this file: " +
+	            filename);
+	    }
+
+		FileInputStream fileInputStream = new FileInputStream(filename);
+		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+		Values val = (Values) objectInputStream.readObject();
+		objectInputStream.close(); 
+
+		System.out.println("Results " + val.getLstResults());
+		//fillValues();
+		String txtOneString = val.getListOne().toString();
+		txtOneString = txtOneString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtTwoString = val.getListTwo().toString();
+		txtTwoString = txtTwoString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtThreeString = val.getListThree().toString();
+		txtThreeString = txtThreeString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtFourString = val.getListFour().toString();
+		txtFourString = txtFourString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtFiveString = val.getListFive().toString();
+		txtFiveString = txtFiveString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtSixString = val.getListSix().toString();
+		txtSixString = txtSixString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtResultsString = val.getLstResults().toString();
+		txtResultsString = txtResultsString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+		String txtPatternsString = val.getPatternList().toString();
+		txtPatternsString = txtPatternsString.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
+
+		//Reset all values in form
+		txtOne.setText(txtOneString);
+		txtTwo.setText(txtTwoString);
+		txtThree.setText(txtThreeString);
+		txtFour.setText(txtFourString);
+		txtFive.setText(txtFiveString);
+		txtSix.setText(txtSixString);
+		txtResults.setText(txtResultsString);
+		txtNumResults.setText(Integer.toString(val.getNumResults()));
+		txtPatterns.setText(txtPatternsString);
+	}
+
+	//Generate letter combinations in results panel
 	private void genResults() {
 		txtResults.setText("");
 		System.out.println("Set text");
@@ -347,11 +496,9 @@ public class WordGenerator extends javax.swing.JFrame {
 		results = results.replaceAll(", ", "\n").replaceAll("\\[|\\]", "");
 		txtResults.append(results);
 		System.out.println("Appended list results");
-
-		//		4. print val.lstResults as string to txtResults,
-		//			removing brackets and inserting line breaks at commas
 	}
 
+	//Fill arrays with values entered into generator
 	private void fillArrays() {
 		val.setNumResults(Integer.parseInt(txtNumResults.getText()));
 
@@ -419,6 +566,35 @@ public class WordGenerator extends javax.swing.JFrame {
 		val.setPatternList(lstPatterns);
 		System.out.println("Appended Pattern list");
 
+	}
+
+	//Reset all values to blank/null/default
+	private void resetValues() {
+
+		//Reset all values in form to default
+		txtOne.setText("");
+		txtTwo.setText("");
+		txtThree.setText("");
+		txtFour.setText("");
+		txtFive.setText("");
+		txtSix.setText("");
+		txtResults.setText("");
+		txtNumResults.setText(Integer.toString(defaultResults));
+		txtPatterns.setText("");
+
+		//Clear values object
+		val.setFilename("");
+		val.setListOne(null);
+		val.setListTwo(null);
+		val.setListThree(null);
+		val.setListFour(null);
+		val.setListFive(null);
+		val.setListSix(null);
+		val.setPatternList(null);
+		val.setLstResults(null);
+		val.setNumResults(defaultResults);
+		System.out.println("New Value Set");
+		System.out.println(val.getLstResults());
 	}
 
 	public static void main(String args[]) {

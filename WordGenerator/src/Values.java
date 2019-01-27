@@ -1,6 +1,9 @@
 
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -9,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Values implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	//private String numResults;
 	private int numResults;
 	private int counter;
@@ -36,7 +39,7 @@ public class Values implements Serializable {
 	public String getFilename() {
 		return filename;
 	}
-	
+
 	//set numResults
 	public void setNumResults(int results) {
 		this.numResults = results;
@@ -147,69 +150,105 @@ public class Values implements Serializable {
 		counter = numResults;
 		int patternCounter = 0;
 		int selectedLetterNum;
+		String error = "Enter at least one generation pattern.";
 
 		System.out.println("Set Counter To " + counter);
 
-		do {
-			int selectedPatternNum = RandomUtils.nextInt(0, (lstPatterns.size() -1));
-			selectedPattern = lstPatterns.get(selectedPatternNum);
-			System.out.println("Selected Pattern " + selectedPattern);
+		//Check lstPatterns for values
+		//If lstPatterns is empty, display error message and return lstResults
+		if (lstPatterns.isEmpty()) {
 
-			lstElements = StringUtils.split(selectedPattern);
-			patternCounter = selectedPattern.length();
-			//selectedPattern.replace("", " ").trim();
-			System.out.println("Pattern Counter " + patternCounter);
-			do {				
-				patternElement = ArrayUtils.toString(lstElements).charAt(patternCounter -1);
-				System.out.println("Pattern Element " + patternElement);
-				{
-					switch(patternElement)
+			JOptionPane.showMessageDialog(null, error, "WordGenerator",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		//If lstPatterns contains values, generate results
+		else {
+
+			do {
+				int selectedPatternNum = RandomUtils.nextInt(0, (lstPatterns.size() -1));
+				selectedPattern = lstPatterns.get(selectedPatternNum);
+				System.out.println("Selected Pattern " + selectedPattern);
+
+				lstElements = StringUtils.split(selectedPattern);
+				patternCounter = selectedPattern.length();
+				System.out.println("Pattern Counter set to " + patternCounter);
+				do {				
+					patternElement = ArrayUtils.toString(lstElements).charAt(patternCounter);
+					System.out.println("Pattern Element " + patternElement);
 					{
-					case '1':
-						selectedLetterNum = RandomUtils.nextInt(0, (lstOne.size() -1));
-						selectedLetter = lstOne.get(selectedLetterNum);
-						break;
+						switch(patternElement)
+						{
+						case '1':
+							if (lstOne.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstOne.size() -1));
+								selectedLetter = lstOne.get(selectedLetterNum);
+							}
+							break;
 
-					case '2':
-						selectedLetterNum = RandomUtils.nextInt(0, (lstTwo.size() -1));
-						selectedLetter = lstTwo.get(selectedLetterNum);
-						break;
-					case '3':
-						selectedLetterNum = RandomUtils.nextInt(0, (lstThree.size() -1));
-						selectedLetter = lstThree.get(selectedLetterNum);
-						break;
+						case '2':
+							if (lstTwo.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstTwo.size() -1));
+								selectedLetter = lstTwo.get(selectedLetterNum);
+							}
+							break;
+						case '3':
+							if (lstThree.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstThree.size() -1));
+								selectedLetter = lstThree.get(selectedLetterNum);
+							}
+							break;
 
-					case '4':
-						selectedLetterNum = RandomUtils.nextInt(0, (lstFour.size() -1));
-						selectedLetter = lstFour.get(selectedLetterNum);
-						break;
+						case '4':
+							if (lstFour.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstFour.size() -1));
+								selectedLetter = lstFour.get(selectedLetterNum);
+							}
+							break;
 
-					case '5':
-						selectedLetterNum = RandomUtils.nextInt(0, (lstFive.size() -1));
-						selectedLetter = lstFive.get(selectedLetterNum);
-						break;
+						case '5':
+							if (lstFive.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstFive.size() -1));
+								selectedLetter = lstFive.get(selectedLetterNum);
+							}
+							break;
 
-					default : 
-						selectedLetterNum = RandomUtils.nextInt(0, (lstSix.size() -1));
-						selectedLetter = lstSix.get(selectedLetterNum);
-					}	
-					System.out.println("Selected letter " + selectedLetter);
-					
-					indResult += selectedLetter;
-					selectedLetter = "";
-					System.out.println("IndResult = " + indResult);
-					patternCounter -= 1;
-					System.out.println("Pattern Counter set to " + patternCounter);
-				}
-				
-			} while (patternCounter > 0);
+						default : 
+							if (lstSix.isEmpty()) {
+								selectedLetter = "";
+							} else {
+								selectedLetterNum = RandomUtils.nextInt(0, (lstSix.size() -1));
+								selectedLetter = lstSix.get(selectedLetterNum);
+							}
+						}	
+						System.out.println("Selected letter " + selectedLetter);
 
-			lstResults.add(indResult);
-			indResult = "";
-			counter = counter - 1;
-			System.out.println("Counter set to " + counter);
+						indResult += selectedLetter;
+						selectedLetter = "";
+						System.out.println("IndResult = " + indResult);
+						patternCounter -= 1;
+						System.out.println("Pattern Counter set to " + patternCounter);
+					}
 
-		} while (counter > 0);
+				} while (patternCounter > 0);
+
+				lstResults.add(indResult);
+				indResult = "";
+				counter = counter - 1;
+				System.out.println("Counter set to " + counter);
+
+			} while (counter > 0);
+		}
 		return lstResults;
 	}
 
